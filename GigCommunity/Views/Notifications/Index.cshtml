@@ -1,0 +1,66 @@
+﻿@model IEnumerable<GigCommunity.Core.Models.Notification>
+@{
+    ViewBag.Title = "Notifications";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Notifications</h2>
+
+<!-- BEGIN GRID AREA -->
+<div id="gigGrid" class="table-responsive">
+    <table class="table table-condensed table-bordered table-striped table-hover">
+        <thead>
+            <tr>
+                <th style="width: 113px">Type</th>
+                <th>Artist</th>
+                <th>Change</th>
+                <th>Notification</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    @if (Convert.ToInt32(@item.Type) == 1)
+                    {
+                        <td>Gig Canceled</td>
+                        <td>@item.Gig.Artist.Name</td>
+                        <td>Canceled</td>
+                        <td>The Gig in <strong>@item.Gig.Venue</strong> at @item.Gig.DateTime was canceled.</td>
+                    }
+                    @if (Convert.ToInt32(@item.Type) == 2)
+                    {
+                        <td>Gig Updated</td>
+                        <td>@item.Gig.Artist.Name</td>
+                        if ((@item.OriginalDateTime != @item.DateTime) && (@item.OriginalVenue != @item.Gig.Venue))
+                        {
+                            <td>Date and Venue</td>
+                            <td>
+                                The <strong>date</strong> of the gig was changed from @item.OriginalDateTime to @item.DateTime
+                                and the <strong>venue</strong> was changed from @item.OriginalVenue to @item.Gig.Venue.</td>
+                        }
+                        else if (@item.OriginalDateTime != @item.DateTime)
+                        {
+                            <td>Date</td>
+                        <td>The <strong>date</strong> of the gig was changed from @item.OriginalDateTime to @item.DateTime</td>
+                        }
+                        else if (@item.OriginalVenue != @item.Gig.Venue)
+                        {
+                            <td>Venue</td>
+                            <td>The <strong>venue</strong> of the gig was changed from @item.OriginalVenue to @item.Gig.Venue</td>
+                        }
+                    }
+                    @if (Convert.ToInt32(@item.Type) == 3)
+                    {
+                        <td>Gig Created</td>
+                        <td>@item.Gig.Artist.Name</td>
+                        <td>Created</td>
+                        <td>The Gig in <strong>@item.Gig.Venue</strong> at @item.Gig.DateTime was created.</td>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<!-- END GRID AREA -->

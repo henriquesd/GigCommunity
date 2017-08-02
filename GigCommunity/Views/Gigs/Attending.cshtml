@@ -1,0 +1,81 @@
+﻿@model GigCommunity.Core.ViewModels.GigsViewModel
+
+@{
+    ViewBag.Title = "Gigs I'm Attending";
+}
+
+<h1>@Model.Heading</h1>
+
+@using (Html.BeginForm("Search", "Gigs"))
+{
+    @Html.HiddenFor(x => x.Heading)
+    <div class="form-group">
+        <div id="searchGigs" class="input-group">
+            @Html.TextBoxFor(m => m.SearchTerm, new { @class = "form-control", @placeholder = "Search by Artist, Genre or Venue" })
+            <span class="input-group-addon">
+                <i class="glyphicon glyphicon-search"></i>
+            </span>
+        </div>
+    </div>
+}
+
+<!-- BEGIN GRID AREA -->
+<div id="gigs" class="table-responsive">
+    <table class="table table-condensed table-bordered table-striped table-hover">
+        <thead>
+            <tr>
+                <th>Artist</th>
+                <th>Date</th>
+                <th>Venue</th>
+                <th>Genre</th>
+                @if (Model.ShowActions)
+                {
+                    <th class="action-button-column" style="text-align: center;">
+                        Action
+                    </th>
+                }
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (var item in Model.UpcomingGigs)
+            {
+                <tr>
+                    <td>
+                        <a href="@Url.Action("Details", "Gigs", new { id = @item.Id })">
+                            @item.Artist.Name
+                        </a>
+                    </td>
+                    <td>@item.DateTime</td>
+                    <td>@item.Venue</td>
+                    <td>@item.Genre.Name</td>
+                    @if (Model.ShowActions)
+                {
+                        <td class="action-button-column" style="text-align: center;">
+
+                            @if (@item.IsCanceled)
+                            {
+                                <span class="label label-warning">Canceled</span>
+                            }
+                            else
+                            {
+                                <span class="label label-success">Confirmed</span>
+                            }
+                        </td>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<!-- END GRID AREA -->
+
+
+@section scripts
+{
+    <script>
+        $(document).ready(function () {
+            GigsController.init("#gigs");
+        });
+    </script>
+}
