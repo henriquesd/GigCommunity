@@ -35,7 +35,7 @@ namespace GigCommunity.Tests.Persistence.Repositories
         [TestMethod]
         public void GetUpcomingGigsByArtist_GigIsInThePast_ShouldNotBeReturned()
         {
-            // ontem;
+            // yesterday;
             var gig = new Gig() { DateTime = DateTime.Now.AddDays(-1), ArtistId = "1" };
 
             _mockGigs.SetSource(new[] { gig });
@@ -48,7 +48,7 @@ namespace GigCommunity.Tests.Persistence.Repositories
         [TestMethod]
         public void GetUpcomingGigsByArtist_GigIsCanceled_ShouldNotBeReturned()
         {
-            //amanhã;
+            // tomorrow;
             var gig = new Gig() { DateTime = DateTime.Now.AddDays(1), ArtistId = "1" };
             gig.Cancel();
 
